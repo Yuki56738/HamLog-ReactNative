@@ -6,7 +6,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export function getCallSign(data:string) {
 
     const jsondata = JSON.parse(data)
-    console.log(jsondata['callsign'])
     return jsondata['callsign']
 }
 
@@ -24,10 +23,9 @@ export default function App() {
     const loadStorage = async () =>{
         const loadDataString = await AsyncStorage.getItem('data')
         setCallSigns(loadDataString)
-        console.log(loadDataString)
     }
     // setCallSigns([...callSigns, {key: 'data', text: AsyncStorage.getItem('data').toString()}])
-    const addCallSign = () => {
+    const addCallSign = async () => {
         if (callSign.trim()) {
             setCallSigns([...callSigns, {
                 key: Date.now().toString(),
@@ -35,8 +33,10 @@ export default function App() {
             }]);
             const saveStorage = async () =>{
                 await AsyncStorage.setItem('data', JSON.stringify({callsign: callSign, hisrs: hisRS}).toString())
+                console.log(AsyncStorage.getItem('data'))
             }
-            // AsyncStorage.setItem('data', callSigns.toString());
+            await saveStorage()
+
             setCallSign('');
             setHisRS('')
         }
