@@ -24,7 +24,7 @@ export default function App() {
         if (callSign.trim()) {
             setCallSigns([...callSigns, {
                 key: Date.now().toString(),
-                text: JSON.stringify({callsign: callSign.toUpperCase(), hisrs: hisRS}).toString()
+                text: JSON.stringify({date: Date.now().toString(), callsign: callSign.toUpperCase(), hisrs: hisRS}).toString()
             }]);
             setCallSign('');
             setHisRS('')
