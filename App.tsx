@@ -27,13 +27,16 @@ export default function App() {
     // setCallSigns([...callSigns, {key: 'data', text: AsyncStorage.getItem('data').toString()}])
     const addCallSign = async () => {
         if (callSign.trim()) {
+            const data = JSON.stringify({callsign: callSign.toUpperCase(), hisrs: hisRS});
+            console.log(data);
             setCallSigns([...callSigns, {
                 key: Date.now().toString(),
-                text: JSON.stringify({callsign: callSign.toUpperCase(), hisrs: hisRS}).toString()
+                text: data
             }]);
             const saveStorage = async () =>{
-                await AsyncStorage.setItem('data', JSON.stringify({callsign: callSign, hisrs: hisRS}).toString())
-                console.log(AsyncStorage.getItem('data'))
+                await AsyncStorage.setItem("data", data);
+                const re = await AsyncStorage.getItem("data")
+                console.log(re)
             }
             await saveStorage()
 
@@ -95,4 +98,3 @@ export default function App() {
         </View>
 
     )}
-
