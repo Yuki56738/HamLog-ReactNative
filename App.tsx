@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function App() {
     const [callSign, setCallSign] = React.useState('');
     const [callSigns, setCallSigns] = React.useState([])
-    const addTask = () => {
+    const addCallSign = () => {
         if (callSign.trim()) {
             setCallSigns([...callSigns, {key: Date.now().toString(), text: callSign.toUpperCase()}]);
             setCallSign('');
@@ -23,7 +23,7 @@ export default function App() {
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20}}
                     onChangeText={text => setCallSign(text)}
-                    value={callSign}
+                    value={callSign.toUpperCase()}
                     placeholder='  コールサイン'
                 />
                 <TextInput
@@ -41,7 +41,7 @@ export default function App() {
             </View>
             <Button
                 title="追加"
-                onPress={addTask}
+                onPress={addCallSign}
             />
             <FlatList
                 data={callSigns}
