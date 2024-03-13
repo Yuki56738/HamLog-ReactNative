@@ -4,13 +4,15 @@ import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function getCallSign(data:string) {
-    console.log(data);
-    JSON.parse(data, (key, value)=>{
-        if (key === 'callsign') {
-            console.log(value)
-            return  value
-        }
-    })
+    // JSON.parse(data, (key, value)=>{
+    //     if (key === 'callsign') {
+    //         console.log(value)
+    //         return  value
+    //     }
+    // })
+    const jsondata = JSON.parse(data)
+    console.log(jsondata['callsign'])
+    return jsondata['callsign']
 }
 
 
