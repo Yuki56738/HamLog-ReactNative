@@ -6,16 +6,27 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function App() {
     const [callSign, setCallSign] = React.useState('');
     const [callSigns, setCallSigns] = React.useState([])
+    const [hisRS, setHisRS] = React.useState('')
+    const [hisRSs, setHisRSs] = React.useState([])
     const addCallSign = () => {
         if (callSign.trim()) {
-            setCallSigns([...callSigns, {key: Date.now().toString(), text: callSign.toUpperCase()}]);
+            const data = JSON.stringify({callSign: callSign.toUpperCase(), hisRS: hisRS})
+            console.log(data)
+            setCallSigns([...callSigns, {key: Date.now().toString(), text: data}]);
             setCallSign('');
         }
     };
+    // const addHisRS = () =>{
+    //     if (hisRS.trim()){
+    //         setHisRSs([...hisRSs, {key: Date.now().toString(), text: hisRS}]);
+    //     }
+    // }
     const deleteTask = (taskId) => {
         setCallSigns(callSigns.filter(task => task.key !== taskId));
     };
-
+    const getCallSign = () => {
+        JSON.parse(callSign)
+    }
     return (
         <View style={{padding: 20}}>
             <Text style={{fontSize: 24, marginBottom: 20}}>ハムログ by JK1UXI</Text>
@@ -23,13 +34,13 @@ export default function App() {
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20}}
                     onChangeText={text => setCallSign(text)}
-                    value={callSign.toUpperCase()}
+                    value={callSign}
                     placeholder='  コールサイン'
                 />
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20, width: 60}}
-                    // onChangeText={text => setCallSign(text)}
-                    // value={callSign}
+                    onChangeText={text => setHisRS(text)}
+                    value={hisRS}
                     placeholder='  His RS'
                 />
                 <TextInput
