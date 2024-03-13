@@ -4,9 +4,10 @@ import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function getCallSign(data:string) {
+    console.log(data);
     JSON.parse(data, (key, value)=>{
         if (key === 'callsign') {
-            console.log(value.text)
+            console.log(value)
             return  value
         }
     })
@@ -30,6 +31,7 @@ export default function App() {
             setCallSign('');
             setHisRS('')
         }
+
     };
     // const addHisRS = () =>{
     //     if (hisRS.trim()){
