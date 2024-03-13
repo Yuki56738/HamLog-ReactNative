@@ -3,14 +3,19 @@ import {Button, FlatList, StyleSheet, Text, TextInput, View} from 'react-native'
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export function getCallSign(data:string) {
+// import * as Constants from "node:constants";
+
+export function getCallSign(data: string) {
 
     const jsondata = JSON.parse(data)
+    if(jsondata['callsign'] === undefined || jsondata['callsign'] === null){
+        return {}
+    }
     console.log(jsondata['callsign'])
     return jsondata['callsign']
 }
 
-export function getHisRS(data:string) {
+export function getHisRS(data: string) {
     const jsondata = JSON.parse(data)
     return jsondata['hisrs']
 }
@@ -20,7 +25,7 @@ export default function App() {
     const [callSigns, setCallSigns] = React.useState([])
     const [hisRS, setHisRS] = React.useState('')
     const [hisRSs, setHisRSs] = React.useState([])
-    const loadFromStorage = async ()=>{
+    const loadFromStorage = async () => {
         let rawdata = await AsyncStorage.getItem('data')
         console.log(`loadFromStorage: ${rawdata}`)
         const jsondata = JSON.parse(rawdata)
@@ -28,20 +33,28 @@ export default function App() {
             key: Date.now().toString(),
             text: rawdata
         }]);
-        if(rawdata === undefined || rawdata === null){
+        if (rawdata === undefined || rawdata === null) {
             rawdata = JSON.stringify({})
         }
     }
-    React.useEffect(()=>{
+    React.useEffect(() => {
         loadFromStorage()
-    },[])
+    }, [])
     const addCallSign = async () => {
         if (callSign.trim()) {
             setCallSigns([...callSigns, {
                 key: Date.now().toString(),
-                text: JSON.stringify({date: Date.now().toString(), callsign: callSign.toUpperCase(), hisrs: hisRS}).toString()
+                text: JSON.stringify({
+                    date: Date.now().toString(),
+                    callsign: callSign.toUpperCase(),
+                    hisrs: hisRS
+                }).toString()
             }]);
-            await AsyncStorage.setItem('data', JSON.stringify({date: Date.now().toString(), callsign: callSign.toUpperCase(), hisrs: hisRS}).toString())
+            await AsyncStorage.setItem('data', JSON.stringify({
+                date: Date.now().toString(),
+                callsign: callSign.toUpperCase(),
+                hisrs: hisRS
+            }).toString())
             setCallSign('');
             setHisRS('')
         }
@@ -80,22 +93,40 @@ export default function App() {
             {/*    <Text>コールサイン</Text>*/}
             {/*    <Text>HisRS</Text>*/}
             {/*</View>*/}
-            <FlatList
-                data={callSigns}
-                renderItem={({item}) => (
-                    <View style={{flexDirection: 'row', marginTop: 10}}>
-                        <Text style={{marginRight: 10}}>
-                            {getCallSign(item.text)}</Text>
-                        <Text style={{marginRight: 10}}>
-                            {getHisRS(item.text)}
-                        </Text>
-                        <Button
-                            title="削除"
-                            onPress={() => deleteTask(item.key)}
-                        />
-                    </View>
-                )}
-            />
+            {/*<FlatList*/}
+            {/*    data={callSigns}*/}
+            {/*    renderItem={({item}) => (*/}
+            {/*        <View style={{flexDirection: 'row', marginTop: 10}}>*/}
+            {/*            <Text style={{marginRight: 10}}>*/}
+            {/*                {getCallSign(item.text)}</Text>*/}
+            {/*            <Text style={{marginRight: 10}}>*/}
+            {/*                {getHisRS(item.text)}*/}
+            {/*            </Text>*/}
+            {/*            <Button*/}
+            {/*                title="削除"*/}
+            {/*                onPress={() => deleteTask(item.key)}*/}
+            {/*            />*/}
+            {/*        </View>*/}
+            {/*    )}*/}
+            {/*/>*/}
+            <View style={styles.container}>
+                <FlatList
+                    data={Object.keys(getCallSign(callSigns))}
+                    renderItem={({item}) => <Text>{getCallSign(callSigns)[item].name}</Text>}
+                />
+            </View>
+
+
         </View>
 
-    )}
+    )
+}
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        // paddingTop: Constants.statusBarHeight,
+        backgroundColor: '#ecf0f1',
+        padding: 8,
+    },
+});
