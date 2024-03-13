@@ -3,11 +3,12 @@ import {Button, FlatList, StyleSheet, Text, TextInput, View} from 'react-native'
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+let data = '';
 export function getCallSign(data:string) {
     JSON.parse(data, (key, value)=>{
         if (key === 'callsign') {
             console.log(value.text)
-            return value.text
+            data = value.text
         }
     })
 }
@@ -18,14 +19,13 @@ export default function App() {
     const [callSigns, setCallSigns] = React.useState([])
     const [hisRS, setHisRS] = React.useState('')
     const [hisRSs, setHisRSs] = React.useState([])
-    let data = '';
     const addCallSign = () => {
         if (callSign.trim()) {
             // const data = JSON.stringify({callSign: callSign.toUpperCase(), hisRS: hisRS})
             // console.log(data)
             setCallSigns([...callSigns, {
                 key: Date.now().toString(),
-                text: JSON.stringify({'callsign': callSign, 'hisRS': hisRS}).toString()
+                text: JSON.stringify({callsign: callSign, hisrs: hisRS}).toString()
             }]);
             // setHisRSs([...hisRSs, {key: Date.now().toString(), text: hisRS.toString()}]);
             setCallSign('');
