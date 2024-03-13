@@ -3,12 +3,11 @@ import {Button, FlatList, StyleSheet, Text, TextInput, View} from 'react-native'
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-let data = '';
 export function getCallSign(data:string) {
     JSON.parse(data, (key, value)=>{
         if (key === 'callsign') {
             console.log(value.text)
-            data = value.text
+            return  value
         }
     })
 }
