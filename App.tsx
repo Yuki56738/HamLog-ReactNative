@@ -3,17 +3,30 @@ import {Button, FlatList, StyleSheet, Text, TextInput, View} from 'react-native'
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+function getCallSign(data:string) {
+    JSON.parse(data, (key, value)=>{
+        if (key === 'callsign') {
+            return value.text
+        }
+    })
+}
+
+
 export default function App() {
     const [callSign, setCallSign] = React.useState('');
     const [callSigns, setCallSigns] = React.useState([])
     const [hisRS, setHisRS] = React.useState('')
     const [hisRSs, setHisRSs] = React.useState([])
+    let data = '';
     const addCallSign = () => {
         if (callSign.trim()) {
             // const data = JSON.stringify({callSign: callSign.toUpperCase(), hisRS: hisRS})
             // console.log(data)
-            setCallSigns([...callSigns, {key: Date.now().toString(), text: callSign.toUpperCase()}]);
-
+            setCallSigns([...callSigns, {
+                key: Date.now().toString(),
+                text: JSON.stringify({'callsign': callSign, 'hisRS': hisRS}).toString()
+            }]);
+            // setHisRSs([...hisRSs, {key: Date.now().toString(), text: hisRS.toString()}]);
             setCallSign('');
             setHisRS('')
         }
@@ -26,9 +39,7 @@ export default function App() {
     const deleteTask = (taskId) => {
         setCallSigns(callSigns.filter(task => task.key !== taskId));
     };
-    const getCallSign = () => {
-        JSON.parse(callSign)
-    }
+
     return (
         <View style={{padding: 20}}>
             <Text style={{fontSize: 24, marginBottom: 20}}>ハムログ by JK1UXI</Text>
@@ -60,7 +71,9 @@ export default function App() {
                 data={callSigns}
                 renderItem={({item}) => (
                     <View style={{flexDirection: 'row', marginTop: 10}}>
-                        <Text style={{marginRight: 10}}>{item.text}</Text>
+                        <Text style={{marginRight: 10}}>
+
+                            {getCallSign(item.text)}</Text>
                         <Button
                             title="削除"
                             onPress={() => deleteTask(item.key)}
