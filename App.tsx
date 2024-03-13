@@ -1,6 +1,7 @@
 import {StatusBar} from 'expo-status-bar';
 import {Button, FlatList, StyleSheet, Text, TextInput, View} from 'react-native';
 import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
     const [callSign, setCallSign] = React.useState('');
@@ -18,12 +19,26 @@ export default function App() {
     return (
         <View style={{padding: 20}}>
             <Text style={{fontSize: 24, marginBottom: 20}}>ハムログ by JK1UXI</Text>
-            <TextInput
-                style={{height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20}}
-                onChangeText={text => setCallSign(text)}
-                value={callSign}
-                placeholder='コールサイン'
-            />
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <TextInput
+                    style={{height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20}}
+                    onChangeText={text => setCallSign(text)}
+                    value={callSign}
+                    placeholder='コールサイン'
+                />
+                <TextInput
+                    style={{height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20, width: 60}}
+                    // onChangeText={text => setCallSign(text)}
+                    // value={callSign}
+                    placeholder='His RS'
+                />
+                <TextInput
+                    style={{height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20, width: 60}}
+                    // onChangeText={text => setCallSign(text)}
+                    // value={callSign}
+                    placeholder='My RS'
+                />
+            </View>
             <Button
                 title="追加"
                 onPress={addTask}
@@ -69,11 +84,11 @@ export default function App() {
     // );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
+// const styles = StyleSheet.create({
+//     container: {
+//         flex: 1,
+//         backgroundColor: '#fff',
+//         alignItems: 'center',
+//         justifyContent: 'center',
+//     },
+// });
