@@ -15,6 +15,7 @@ export default function App() {
             setCallSigns([...callSigns, {key: Date.now().toString(), text: callSign.toUpperCase()}]);
 
             setCallSign('');
+            setHisRS('')
         }
     };
     // const addHisRS = () =>{
