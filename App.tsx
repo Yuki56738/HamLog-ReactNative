@@ -27,13 +27,32 @@ export default function App() {
     // setCallSigns([...callSigns, {key: 'data', text: AsyncStorage.getItem('data').toString()}])
     const addCallSign = async () => {
         if (callSign.trim()) {
+            const data = {
+                date: Date.now().toString(),
+                callsign: callSign.toUpperCase(),
+                hisrs: hisRS
+            };
             setCallSigns([...callSigns, {
                 key: Date.now().toString(),
-                text: JSON.stringify({callsign: callSign.toUpperCase(), hisrs: hisRS}).toString()
+                text: JSON.stringify(data)
             }]);
             const saveStorage = async () =>{
-                await AsyncStorage.setItem('data', JSON.stringify({callsign: callSign, hisrs: hisRS}).toString())
-                console.log(AsyncStorage.getItem('data'))
+                const jsonraw = await AsyncStorage.getItem('data');
+                if (jsonraw === null){
+                    console.log('data is null')
+                    await AsyncStorage.setItem("data", JSON.stringify([data]));
+                    return ;
+                }
+                let jsondata = JSON.parse(jsonraw);
+                const new_hamlog = {
+                    date: Date.now().toString(),
+                    callsign: callSign.toUpperCase(),
+                    hisrs: hisRS
+                }
+                jsondata.push(new_hamlog); // ここで配列に追加したい
+                await AsyncStorage.setItem("data", JSON.stringify(jsondata));
+                const re = await AsyncStorage.getItem("data");
+                console.log(`addCallSign: ${re?.toString()}`);
             }
             await saveStorage()
 
@@ -95,4 +114,3 @@ export default function App() {
         </View>
 
     )}
-
