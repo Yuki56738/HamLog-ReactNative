@@ -16,16 +16,24 @@ export function getHisRS(data:string) {
 }
 
 export default function App() {
+
     const [callSign, setCallSign] = React.useState('');
     const [callSigns, setCallSigns] = React.useState([])
     const [hisRS, setHisRS] = React.useState('')
     const [hisRSs, setHisRSs] = React.useState([])
+    const loadStorage = async () =>{
+        const loadDataString = await AsyncStorage.getItem('data')
+        setCallSigns(loadDataString)
+        console.log(loadDataString)
+    }
+    // setCallSigns([...callSigns, {key: 'data', text: AsyncStorage.getItem('data').toString()}])
     const addCallSign = () => {
         if (callSign.trim()) {
             setCallSigns([...callSigns, {
                 key: Date.now().toString(),
                 text: JSON.stringify({callsign: callSign.toUpperCase(), hisrs: hisRS}).toString()
             }]);
+            AsyncStorage.setItem('data', callSigns.toString());
             setCallSign('');
             setHisRS('')
         }
@@ -60,10 +68,11 @@ export default function App() {
                 title="追加"
                 onPress={addCallSign}
             />
-            {/*<View style={{flexDirection: 'row', alignItems: 'center'}}>*/}
-            {/*    <Text>コールサイン</Text>*/}
-            {/*    <Text>HisRS</Text>*/}
-            {/*</View>*/}
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+
+                <Text>コールサイン</Text>
+                <Text>HisRS</Text>
+            </View>
             <FlatList
                 data={callSigns}
                 renderItem={({item}) => (
