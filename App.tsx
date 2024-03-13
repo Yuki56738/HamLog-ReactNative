@@ -3,63 +3,29 @@ import {Button, FlatList, StyleSheet, Text, TextInput, View} from 'react-native'
 import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// import * as Constants from "node:constants";
+export function getCallSign(data:string) {
 
-// export function getCallSign(data: string) {
-//
-//     const jsondata = JSON.parse(data)
-//     if(jsondata['callsign'] === undefined || jsondata['callsign'] === null){
-//         return {}
-//     }
-//     console.log(jsondata['callsign'])
-//     return jsondata['callsign']
-// }
-//
-// export function getHisRS(data: string) {
-//     const jsondata = JSON.parse(data)
-//     return jsondata['hisrs']
-// }
+    const jsondata = JSON.parse(data)
+    console.log(jsondata['callsign'])
+    return jsondata['callsign']
+}
+
+export function getHisRS(data:string) {
+    const jsondata = JSON.parse(data)
+    return jsondata['hisrs']
+}
 
 export default function App() {
     const [callSign, setCallSign] = React.useState('');
     const [callSigns, setCallSigns] = React.useState([])
     const [hisRS, setHisRS] = React.useState('')
     const [hisRSs, setHisRSs] = React.useState([])
-    const [savedData, setSavedData] = React.useState({})
-    const loadFromStorage = async () => {
-        let rawdata = await AsyncStorage.getItem('data')
-        console.log(`loadFromStorage: ${rawdata}`)
-        const jsondata = JSON.parse(rawdata)
-        if (jsondata !== undefined || rawdata !== undefined) {
-            setSavedData(jsondata)
-            let callsigns = []
-            // setCallSigns(callsigns)
-        // setCallSigns([...callSigns, {
-        //     key: Date.now().toString(),
-        //     text: rawdata
-        // }]);
-        // if (rawdata === undefined || rawdata === null) {
-        //     rawdata = JSON.stringify({})
-        }
-    }
-    React.useEffect(() => {
-        loadFromStorage()
-    }, [])
-    const addCallSign = async () => {
+    const addCallSign = () => {
         if (callSign.trim()) {
             setCallSigns([...callSigns, {
                 key: Date.now().toString(),
-                text: JSON.stringify({
-                    date: Date.now().toString(),
-                    callsign: callSign.toUpperCase(),
-                    hisrs: hisRS
-                }).toString()
+                text: JSON.stringify({date: Date.now().toString(), callsign: callSign.toUpperCase(), hisrs: hisRS}).toString()
             }]);
-            await AsyncStorage.setItem('data', JSON.stringify({
-                date: Date.now().toString(),
-                callsign: callSign.toUpperCase(),
-                hisrs: hisRS
-            }))
             setCallSign('');
             setHisRS('')
         }
@@ -70,52 +36,50 @@ export default function App() {
     };
 
     return (
-        <><View style={{padding: 20}}>
+        <View style={{padding: 20}}>
             <Text style={{fontSize: 24, marginBottom: 20}}>ハムログ by JK1UXI</Text>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20}}
                     onChangeText={text => setCallSign(text)}
                     value={callSign}
-                    placeholder='  コールサイン'/>
+                    placeholder='  コールサイン'
+                />
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20, width: 60}}
                     onChangeText={text => setHisRS(text)}
                     value={hisRS}
-                    placeholder='  His RS'/>
+                    placeholder='  His RS'
+                />
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20, width: 60}}
-                    placeholder='  My RS'/>
+                    placeholder='  My RS'
+                />
             </View>
             <Button
                 title="追加"
-                onPress={addCallSign}/>
+                onPress={addCallSign}
+            />
             {/*<View style={{flexDirection: 'row', alignItems: 'center'}}>*/}
             {/*    <Text>コールサイン</Text>*/}
             {/*    <Text>HisRS</Text>*/}
-        </View><FlatList
-            data={callSigns}
-            renderItem={({item}) => (
-                <View style={{flexDirection: 'row', marginTop: 10}}>
-                    <Text style={{marginRight: 10}}>
-                        {item.text}</Text>
-                    {/*        <Button*/}
-                    {/*            title="削除"*/}
-                    {/*            onPress={() => deleteTask(item.key)}/>*/}
-                    {/*    </View>*/}
-                    {/*)}/></>*/}
-                    {/*/!*<View style={styles.container}>*!/*/}
-                    {/*    <FlatList*/}
-                    {/*        data={callSigns}*/}
-                    {/*        keyExtractor={(item, index)=> item}*/}
-                    {/*        renderItem={item=>{*/}
-                    {/*            <Text>{item.text}</Text>*/}
-                    {/*        }}*/}
-                    {/*    />*/}
-                    {/*</View>*/}
+            {/*</View>*/}
+            <FlatList
+                data={callSigns}
+                renderItem={({item}) => (
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                        <Text style={{marginRight: 10}}>
+                            {getCallSign(item.text)}</Text>
+                        <Text style={{marginRight: 10}}>
+                            {getHisRS(item.text)}
+                        </Text>
+                        <Button
+                            title="削除"
+                            onPress={() => deleteTask(item.key)}
+                        />
+                    </View>
+                )}
+            />
+        </View>
 
-
-                </View>
-
-            )}/></>
-
+    )}
