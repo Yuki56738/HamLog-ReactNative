@@ -10,9 +10,10 @@ export default function App() {
     const [hisRSs, setHisRSs] = React.useState([])
     const addCallSign = () => {
         if (callSign.trim()) {
-            const data = JSON.stringify({callSign: callSign.toUpperCase(), hisRS: hisRS})
-            console.log(data)
-            setCallSigns([...callSigns, {key: Date.now().toString(), text: data}]);
+            // const data = JSON.stringify({callSign: callSign.toUpperCase(), hisRS: hisRS})
+            // console.log(data)
+            setCallSigns([...callSigns, {key: Date.now().toString(), text: callSign.toUpperCase()}]);
+
             setCallSign('');
         }
     };
