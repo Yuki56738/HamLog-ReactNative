@@ -24,19 +24,19 @@ export default function App() {
                     style={{height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20}}
                     onChangeText={text => setCallSign(text)}
                     value={callSign}
-                    placeholder='コールサイン'
+                    placeholder='  コールサイン'
                 />
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20, width: 60}}
                     // onChangeText={text => setCallSign(text)}
                     // value={callSign}
-                    placeholder='His RS'
+                    placeholder='  His RS'
                 />
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20, width: 60}}
                     // onChangeText={text => setCallSign(text)}
                     // value={callSign}
-                    placeholder='My RS'
+                    placeholder='  My RS'
                 />
             </View>
             <Button
