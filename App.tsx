@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export function getCallSign(data:string) {
 
     const jsondata = JSON.parse(data)
+    console.log(jsondata['callsign'])
     return jsondata['callsign']
 }
 
@@ -15,47 +16,32 @@ export function getHisRS(data:string) {
 }
 
 export default function App() {
-
     const [callSign, setCallSign] = React.useState('');
     const [callSigns, setCallSigns] = React.useState([])
     const [hisRS, setHisRS] = React.useState('')
     const [hisRSs, setHisRSs] = React.useState([])
-    const loadStorage = async () =>{
-        const loadDataString = await AsyncStorage.getItem('data')
-        setCallSigns(loadDataString)
+    const loadFromStorage = async ()=>{
+        let rawdata = await AsyncStorage.getItem('data')
+        console.log(`loadFromStorage: ${rawdata}`)
+        const jsondata = JSON.parse(rawdata)
+        setCallSigns([...callSigns, {
+            key: Date.now().toString(),
+            text: rawdata
+        }]);
+        if(rawdata === undefined || rawdata === null){
+            rawdata = JSON.stringify({})
+        }
     }
-    // setCallSigns([...callSigns, {key: 'data', text: AsyncStorage.getItem('data').toString()}])
+    React.useEffect(()=>{
+        loadFromStorage()
+    },[])
     const addCallSign = async () => {
         if (callSign.trim()) {
-            const data = {
-                date: Date.now().toString(),
-                callsign: callSign.toUpperCase(),
-                hisrs: hisRS
-            };
             setCallSigns([...callSigns, {
                 key: Date.now().toString(),
-                text: JSON.stringify(data)
+                text: JSON.stringify({date: Date.now().toString(), callsign: callSign.toUpperCase(), hisrs: hisRS}).toString()
             }]);
-            const saveStorage = async () =>{
-                const jsonraw = await AsyncStorage.getItem('data');
-                if (jsonraw === null){
-                    console.log('data is null')
-                    await AsyncStorage.setItem("data", JSON.stringify([data]));
-                    return ;
-                }
-                let jsondata = JSON.parse(jsonraw);
-                const new_hamlog = {
-                    date: Date.now().toString(),
-                    callsign: callSign.toUpperCase(),
-                    hisrs: hisRS
-                }
-                jsondata.push(new_hamlog); // ここで配列に追加したい
-                await AsyncStorage.setItem("data", JSON.stringify(jsondata));
-                const re = await AsyncStorage.getItem("data");
-                console.log(`addCallSign: ${re?.toString()}`);
-            }
-            await saveStorage()
-
+            await AsyncStorage.setItem('data', JSON.stringify({date: Date.now().toString(), callsign: callSign.toUpperCase(), hisrs: hisRS}).toString())
             setCallSign('');
             setHisRS('')
         }
@@ -90,11 +76,10 @@ export default function App() {
                 title="追加"
                 onPress={addCallSign}
             />
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-
-                <Text>コールサイン</Text>
-                <Text>HisRS</Text>
-            </View>
+            {/*<View style={{flexDirection: 'row', alignItems: 'center'}}>*/}
+            {/*    <Text>コールサイン</Text>*/}
+            {/*    <Text>HisRS</Text>*/}
+            {/*</View>*/}
             <FlatList
                 data={callSigns}
                 renderItem={({item}) => (
