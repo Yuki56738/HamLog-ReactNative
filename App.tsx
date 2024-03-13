@@ -20,12 +20,28 @@ export default function App() {
     const [callSigns, setCallSigns] = React.useState([])
     const [hisRS, setHisRS] = React.useState('')
     const [hisRSs, setHisRSs] = React.useState([])
-    const addCallSign = () => {
+    const loadFromStorage = async ()=>{
+        let rawdata = await AsyncStorage.getItem('data')
+        console.log(`loadFromStorage: ${rawdata}`)
+        const jsondata = JSON.parse(rawdata)
+        setCallSigns([...callSigns, {
+            key: Date.now().toString(),
+            text: rawdata
+        }]);
+        if(rawdata === undefined || rawdata === null){
+            rawdata = JSON.stringify({})
+        }
+    }
+    React.useEffect(()=>{
+        loadFromStorage()
+    },[])
+    const addCallSign = async () => {
         if (callSign.trim()) {
             setCallSigns([...callSigns, {
                 key: Date.now().toString(),
                 text: JSON.stringify({date: Date.now().toString(), callsign: callSign.toUpperCase(), hisrs: hisRS}).toString()
             }]);
+            await AsyncStorage.setItem('data', JSON.stringify({date: Date.now().toString(), callsign: callSign.toUpperCase(), hisrs: hisRS}).toString())
             setCallSign('');
             setHisRS('')
         }
