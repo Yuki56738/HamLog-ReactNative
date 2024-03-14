@@ -20,12 +20,15 @@ export default function App() {
     const [callSigns, setCallSigns] = React.useState([])
     const [hisRS, setHisRS] = React.useState('')
     const [hisRSs, setHisRSs] = React.useState([])
+    const [myRS, setMyRS] = React.useState('')
     const addCallSign = async () => {
         if (callSign.trim()) {
 
             // const data = JSON.stringify({callsign: callSign.toUpperCase(), hisrs: hisRS});
             let data = []
-            data.push([Date.now().toString(), callSign, hisRS])
+            let date = new Date();
+            let date1 = `${date.getFullYear()}/${date.getMonth()}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
+            data.push([date1, callSign.toUpperCase(), hisRS, myRS])
             console.log(data);
             setCallSigns(data);
             const saveStorage = async () =>{
@@ -37,6 +40,7 @@ export default function App() {
 
             setCallSign('');
             setHisRS('')
+            setMyRS('')
         }
 
     };
@@ -62,6 +66,8 @@ export default function App() {
                 />
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20, width: 60}}
+                    value={myRS}
+                    onChangeText={text => setMyRS(text)}
                     placeholder='  My RS'
                 />
             </View>
@@ -76,7 +82,8 @@ export default function App() {
             <FlatList
                 data={callSigns}
                 renderItem={({item}) => (
-                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                    // <View style={{flexDirection: 'row', marginTop: 10}}>
+                    <View>
                         <Text>
                             {item}</Text>
                         {/*<Text style={{marginRight: 10}}>*/}
