@@ -20,7 +20,7 @@ export default function App() {
     const [callSigns, setCallSigns] = React.useState([])
     const [hisRS, setHisRS] = React.useState('')
     const [hisRSs, setHisRSs] = React.useState([])
-    const addCallSign = () => {
+    const addCallSign = async () => {
         if (callSign.trim()) {
 
             const data = JSON.stringify({callsign: callSign.toUpperCase(), hisrs: hisRS});
