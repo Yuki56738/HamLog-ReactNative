@@ -23,12 +23,11 @@ export default function App() {
     const addCallSign = async () => {
         if (callSign.trim()) {
 
-            const data = JSON.stringify({callsign: callSign.toUpperCase(), hisrs: hisRS});
+            // const data = JSON.stringify({callsign: callSign.toUpperCase(), hisrs: hisRS});
+            let data = []
+            data.push([Date.now().toString(), callSign, hisRS])
             console.log(data);
-            setCallSigns([...callSigns, {
-                key: Date.now().toString(),
-                text: data
-            }]);
+            setCallSigns(data);
             const saveStorage = async () =>{
                 await AsyncStorage.setItem("data", data);
                 const re = await AsyncStorage.getItem("data")
@@ -78,11 +77,11 @@ export default function App() {
                 data={callSigns}
                 renderItem={({item}) => (
                     <View style={{flexDirection: 'row', marginTop: 10}}>
-                        <Text style={{marginRight: 10}}>
-                            {getCallSign(item.text)}</Text>
-                        <Text style={{marginRight: 10}}>
-                            {getHisRS(item.text)}
-                        </Text>
+                        <Text>
+                            {item}</Text>
+                        {/*<Text style={{marginRight: 10}}>*/}
+                        {/*    {getHisRS(item.text)}*/}
+                        {/*</Text>*/}
                         <Button
                             title="削除"
                             onPress={() => deleteTask(item.key)}
