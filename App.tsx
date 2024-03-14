@@ -81,9 +81,9 @@ export default function App() {
             {/*</View>*/}
             <FlatList
                 data={callSigns}
+                extraData={callSigns}
                 renderItem={({item}) => (
-                    // <View style={{flexDirection: 'row', marginTop: 10}}>
-                    <View>
+                    <View style={{flexDirection: 'row'}}>
                         <Text>
                             {item}</Text>
                         {/*<Text style={{marginRight: 10}}>*/}
